@@ -49,6 +49,7 @@ for(let i = 0; i < 9 ; i++){
         if(playerTurn === 0){
 
             $(event.currentTarget).text('X').css('color','blue');
+            $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
             playerTurn++;
             logSymbol(i, boardArray, 'X');
 
@@ -64,7 +65,8 @@ for(let i = 0; i < 9 ; i++){
 
         } else if(playerTurn === 1){
 
-            $(event.currentTarget).text('O').css('color','red');;
+            $(event.currentTarget).text('O').css('color','red');
+            $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
             playerTurn--;
             logSymbol(i, boardArray, 'O');
 
@@ -99,6 +101,7 @@ function logSymbol (cellNum, arr, symbol) {
 function resetGame(){
     
     $('.cell').empty();
+    $('.cell').css("pointer-events","auto"); //turn all cells clickable again
     boardArray = [[0,0,0],[0,0,0],[0,0,0]];
 }
 
