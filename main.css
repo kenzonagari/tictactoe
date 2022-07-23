@@ -1,0 +1,47 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 900;
+    background: rgb(228, 228, 246);
+    
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 200px;
+    font-size: 3em;
+    border: 0px;
+    background: rgb(164, 230, 230);
+}
+
+#board{
+    background: rgb(228, 228, 246);
+    width: 642px;
+    height: 642px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.cell{
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgb(98, 98, 98);
+    background: rgb(236, 247, 255);
+    margin: 5px;
+    cursor: pointer;
+    font-size: 11em;
+    text-align: center;
+}
