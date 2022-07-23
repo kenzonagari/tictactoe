@@ -56,10 +56,10 @@ for(let i = 0; i < 9 ; i++){
             if(checkWin(boardArray, 'X')){
                 console.log('X wins!');
                 xScore++;
-                $('#result').text(`X wins! X: ${xScore}, O: ${oScore}`);
+                $('#result').text(`X wins! X: ${xScore} O: ${oScore}`);
                 resetGame();
             } else if(checkDraw(boardArray)){
-                $('#result').text(`Game drawn! X: ${xScore}, O: ${oScore}`);
+                $('#result').text(`Game drawn! X: ${xScore} O: ${oScore}`);
                 resetGame();
             };
 
@@ -73,10 +73,10 @@ for(let i = 0; i < 9 ; i++){
             if(checkWin(boardArray, 'O')){
                 console.log('O wins!');
                 oScore++;
-                $('#result').text(`O wins! X: ${xScore}, O: ${oScore}`);
+                $('#result').text(`O wins! X: ${xScore} O: ${oScore}`);
                 resetGame();
             } else if(checkDraw(boardArray)){
-                $('#result').text(`Game drawn! X: ${xScore}, O: ${oScore}`);
+                $('#result').text(`Game drawn! X: ${xScore} O: ${oScore}`);
                 resetGame();
             };
         }
