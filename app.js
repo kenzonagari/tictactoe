@@ -4,8 +4,8 @@ const $startGame = $('#start-game');
 $('#board').hide();
 
 $startGame.on('click', ()=>{
-    $startGame.hide('slow');
-    $('#board').show('slow');
+    $startGame.hide();
+    $('#board').show();
 });
 
 const $board = $('#board');
@@ -18,13 +18,18 @@ let boardArray =    [[0,0,0],
 
 let playerTurn = 0; // 0 for 'X', 1 for 'O'
 
+const color = {
+    x: "#71D0FF",
+    o: "#ff5ea9",
+}
+
 function checkWin (arr, symbol) {
     for (let j = 0 ; j < arr.length ; j++){
         for (let i = 0 ; i < arr[j].length ; i++){
             if( (arr[j][0] === symbol && arr[j][1] === symbol && arr[j][2] === symbol) ||
                 (arr[0][i] === symbol && arr[1][i] === symbol && arr[2][i] === symbol) ||
-                (arr[0][0] === symbol && arr [1][1] === symbol && arr[2][2] === symbol)||
-                (arr[0][2] === symbol && arr [1][1] === symbol && arr[2][0] === symbol)){
+                (i === 0 && (arr[i][i] === symbol && arr [i+1][i+1] === symbol && arr[i+2][i+2] === symbol))||
+                (i === 0 && (arr[i][2-i] === symbol && arr [i+1][1-i] === symbol && arr[i+2][i] === symbol))){
                     return true;
                 }
         }
@@ -43,63 +48,90 @@ function checkDraw (arr) {
     return true;
 }
 
-for(let i = 0; i < 9 ; i++){
-    $board.children('div').eq(i).on("click", (event)=>{
-
-        if(playerTurn === 0){
-
-            $(event.currentTarget).text('X').css('color','blue');
-            $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
-            playerTurn++;
-            logSymbol(i, boardArray, 'X');
-
-            if(checkWin(boardArray, 'X')){
-                console.log('X wins!');
-                xScore++;
-                $('#result').text(`X wins! X: ${xScore} O: ${oScore}`);
-                resetGame();
-            } else if(checkDraw(boardArray)){
-                $('#result').text(`Game drawn! X: ${xScore} O: ${oScore}`);
-                resetGame();
-            };
-
-        } else if(playerTurn === 1){
-
-            $(event.currentTarget).text('O').css('color','red');
-            $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
-            playerTurn--;
-            logSymbol(i, boardArray, 'O');
-
-            if(checkWin(boardArray, 'O')){
-                console.log('O wins!');
-                oScore++;
-                $('#result').text(`O wins! X: ${xScore} O: ${oScore}`);
-                resetGame();
-            } else if(checkDraw(boardArray)){
-                $('#result').text(`Game drawn! X: ${xScore} O: ${oScore}`);
-                resetGame();
-            };
-        }
-
-    });
+for(let i = 0; i < 3 ; i++){ //row
+    for(let j = 0 ; j < 3 ; j++){ //col
+        $(`#${i}${j}`).on("click", (event)=>{
+    
+            if(playerTurn === 0){
+    
+                $(event.currentTarget).text('X').css('color',color.x);
+                $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
+                playerTurn++;
+                logSymbol(i, j , boardArray, 'X');
+    
+                if(checkWin(boardArray, 'X')){
+                    console.log('X wins!');
+                    xScore++;
+                    highlightSymbol('X');
+                    $('#result').text(`X wins! X: ${xScore} | O: ${oScore}`);
+                    //resetGame();
+                } else if(checkDraw(boardArray)){
+                    reset('draw');
+                };
+    
+            } else if(playerTurn === 1){
+    
+                $(event.currentTarget).text('O').css('color',color.o);
+                $(event.currentTarget).css("pointer-events","none"); //turn the cell unclickable after clicked once
+                playerTurn--;
+                logSymbol(i, j, boardArray, 'O');
+    
+                if(checkWin(boardArray, 'O')){
+                    console.log('O wins!');
+                    oScore++;
+                    highlightSymbol('O');
+                    $('#result').text(`O wins! X: ${xScore} | O: ${oScore}`);
+                    //resetGame();
+                } else if(checkDraw(boardArray)){
+                    reset('draw');
+                };
+            }
+    
+        });
+    }
 }
 
-function logSymbol (cellNum, arr, symbol) {
-    let elementNum = 0;
-    for (let j = 0; j < arr.length; j++){
-        for(let i = 0; i < arr.length ; i++){
-            if(cellNum === elementNum){
-                arr[j][i] = symbol;
+function logSymbol (row, col, arr, symbol) {
+    for (let i = 0; i < arr.length; i++){
+        for(let j = 0; j < arr.length ; j++){
+            if(row === i && col === j){
+                arr[i][j] = symbol;
                 console.log(arr);
                 return;
             }
-            elementNum++;
         }
     }
 }
 
+function reset(condition){
+    if(condition === "draw"){
+        $('#result').text(`Game drawn! X: ${xScore} | O: ${oScore}`);
+        resetGame();
+    }
+}
+
+function highlightSymbol(symbol){
+    setTimeout(()=>{
+        for(let i = 0; i < 3 ; i++){ //row
+            for(let j = 0 ; j < 3 ; j++){ //col
+                if(boardArray[i][j] === symbol){
+                    console.log('done');
+                    $(`#${i}${j}`).css({animation: `flash 0.5s linear`});
+                }
+            }
+        }
+    },0)
+    setTimeout(()=>{
+        for(let i = 0; i < 3 ; i++){ //row
+            for(let j = 0 ; j < 3 ; j++){ //col
+                $(`#${i}${j}`).css({animation: ``})
+            }
+        }
+        resetGame();
+    },500)
+}
+
 function resetGame(){
-    
     $('.cell').empty();
     $('.cell').css("pointer-events","auto"); //turn all cells clickable again
     boardArray = [[0,0,0],[0,0,0],[0,0,0]];
